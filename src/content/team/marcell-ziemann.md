@@ -1,10 +1,10 @@
 ---
 draft: false
-name: "Marcell Ziemann"
+name: "Kevin Coyle"
 title: "Principal Strategist"
 avatar: {
-    src: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?&fit=crop&w=280",
-    alt: "Marcell Ziemann"
+    src: "https://ga-core.s3.amazonaws.com/production/uploads/instructor/image/16092/webp_thumbnail_kevin_headshot.jpg.webp",
+    alt: "Kevin Coyle"
 }
 publishDate: "2022-11-08 15:39"
 ---
