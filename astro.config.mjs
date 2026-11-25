@@ -7,5 +7,11 @@ import icon from "astro-icon";
 // https://astro.build/config
 export default defineConfig({
   site: "https://sileninja.com",
-  integrations: [tailwind(), mdx(), sitemap(), icon()],
+  integrations: [
+    tailwind(),
+    mdx(),
+    // Keep unlisted pages (e.g. the App Review overview) out of the sitemap.
+    sitemap({ filter: (page) => !page.includes("/app-review/") }),
+    icon(),
+  ],
 });
