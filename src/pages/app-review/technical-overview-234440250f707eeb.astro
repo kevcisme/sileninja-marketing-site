@@ -1,0 +1,135 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/container.astro";
+
+// Unlisted technical overview for the Apple App Review team.
+// Not linked anywhere on the site, excluded from the sitemap (astro.config.mjs),
+// disallowed in robots.txt, and marked noindex/nofollow below. The URL is the
+// only way in — share it only through App Store Connect review notes.
+---
+
+<Layout title="App Review — Technical Overview" noindex={true}>
+  <Container>
+    <div class="max-w-3xl mx-auto mt-16 mb-24 space-y-10">
+      <header class="space-y-3">
+        <p class="text-sm font-semibold uppercase tracking-wide text-slate-400">
+          Confidential — for App Review
+        </p>
+        <h1 class="font-bold text-4xl text-gray-800">How Sileninja works</h1>
+        <p class="text-lg leading-relaxed text-slate-500">
+          This page explains the technology behind Sileninja for the App Review
+          team. It is unlisted and kept off our public site because it describes
+          implementation details we do not publish, both to avoid helping the
+          surveillance our users are protecting themselves from and to protect
+          original work. Please keep the URL within Apple.
+        </p>
+      </header>
+
+      <section class="space-y-3">
+        <h2 class="font-bold text-2xl text-gray-800">What the app does</h2>
+        <p class="text-lg leading-relaxed text-slate-500">
+          Sileninja plays a continuous, speech-shaped acoustic masking signal
+          from the device speaker. The signal sits in the near-ultrasonic band
+          (a configurable carrier around 19.5 kHz, range 18.5–21 kHz), above the
+          range adults hear. Microphones near the phone capture this masking
+          signal together with the user's voice, which substantially reduces the
+          intelligibility of any speech recorded by nearby devices. All signal
+          generation runs on-device in real time; no audio is recorded, stored,
+          or transmitted.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="font-bold text-2xl text-gray-800">The core technology</h2>
+        <ul class="list-disc list-outside pl-6 text-lg leading-relaxed text-slate-500 space-y-3">
+          <li>
+            <strong class="text-gray-700">Masking-signal DSP.</strong> A custom
+            digital signal-processing engine synthesizes speech-like formant and
+            phoneme content and single-sideband (LSB-AM) modulates it onto the
+            ultrasonic carrier using a Hilbert transform. This is not a tone or
+            white noise; it is structured, speech-shaped masking, which is far
+            more effective against speech recognition than a static tone.
+          </li>
+          <li>
+            <strong class="text-gray-700">Speaker–microphone calibration.</strong>
+            The app plays a logarithmic sweep, measures the device's speaker/mic
+            response, and computes an inverse FIR filter so the emitted band is
+            flat and stays inaudible across different hardware.
+          </li>
+          <li>
+            <strong class="text-gray-700">Leakage monitoring and auto-gain.</strong>
+            A control loop continuously measures how much audible energy leaks
+            into the human-hearing range and adjusts output gain to keep the
+            signal inaudible while remaining effective.
+          </li>
+          <li>
+            <strong class="text-gray-700">Beacon detection.</strong> A separate
+            detector monitors the 18–22 kHz band for ultrasonic tracking beacons
+            (a KL-divergence approach in the spirit of the published SoniControl
+            research) and can respond when one is found.
+          </li>
+          <li>
+            <strong class="text-gray-700">Recorder-aware behavior.</strong> The
+            app detects audio interruptions and foreground recording (calls,
+            voice memos) and pauses so it never interferes with the user's own
+            intentional recording, then resumes afterward.
+          </li>
+        </ul>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="font-bold text-2xl text-gray-800">
+          Original, custom-built code
+        </h2>
+        <p class="text-lg leading-relaxed text-slate-500">
+          Sileninja is not built from a commercialized template or an app
+          generation service. The DSP described above is our own work, and it is
+          delivered through custom native modules we wrote specifically for this
+          app:
+        </p>
+        <ul class="list-disc list-outside pl-6 text-lg leading-relaxed text-slate-500 space-y-2">
+          <li>
+            <strong class="text-gray-700">iOS:</strong> a native Swift audio
+            engine built on AVAudioEngine with a real-time AVAudioSourceNode
+            render callback.
+          </li>
+          <li>
+            <strong class="text-gray-700">Android:</strong> a native Kotlin
+            engine using AudioTrack in streaming mode, run from a foreground
+            service.
+          </li>
+        </ul>
+        <p class="text-lg leading-relaxed text-slate-500">
+          The app does not share a codebase, SDK, or content library with any
+          other app on our developer account or any third party, beyond standard
+          frameworks (the React Native/Expo runtime and RevenueCat for
+          subscriptions). The signal-processing engine and native audio modules
+          are unique to this app.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="font-bold text-2xl text-gray-800">
+          Reviewing the full functionality
+        </h2>
+        <p class="text-lg leading-relaxed text-slate-500">
+          Starting protection is a paid (Premium) feature, so on a fresh install
+          the central control opens the subscription screen. To review the full
+          experience, sign in on the review device with the sandbox account given
+          in the App Store Connect review notes and subscribe; sandbox purchases
+          are not charged. With protection active, the home screen shows live
+          status and the Tuning tab exposes the strength, calibration, leakage,
+          pet mode (on by default) and safety controls described above.
+        </p>
+      </section>
+
+      <footer class="pt-6 border-t border-slate-200">
+        <p class="text-base leading-relaxed text-slate-400">
+          Questions during review: info@primarykey.solutions — we respond
+          quickly and can provide a live walkthrough or a build with protection
+          pre-enabled.
+        </p>
+      </footer>
+    </div>
+  </Container>
+</Layout>
